@@ -5,11 +5,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>br.com.justkac.producer</groupId>
-  <artifactId>kafka-producer</artifactId>
+  <groupId>br.com.justkac.consumer</groupId>
+  <artifactId>kafka-consumer</artifactId>
   <version>1.0</version>
 
-  <name>kafka-producer</name>
+  <name>kafka-consumer</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
