@@ -1,30 +1,38 @@
 package br.com.justkac.producer;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
-public class JavaProducer {
-    public static void main(String[] args) {
-        var producer = new KafkaProducer<String, String>(properties());
-        var value = "132123,67523,1234";
-        var record = new ProducerRecord<>("ECOMMERCE_NEW_ORDER", value, value);
+public class KafkaDispatcher implements Closeable {
+
+    private final KafkaProducer<String, String> producer;
+
+    KafkaDispatcher() {
+        this.producer = new KafkaProducer<>(properties());
+    }
+
+    void send(String topic, String key, String value) {
+        var record = new ProducerRecord<>(topic, key, value);
         try {
-            producer.send(record, (data, ex) -> {
+            Callback callback = (data, ex) -> {
                 if (ex != null) {
                     ex.printStackTrace();
                     return;
                 }
                 System.out.println("sucesso enviando " + data.topic() + ":::partition " + data.partition() + "/ offset "
                         + data.offset() + "/ timestamp " + data.timestamp());
-            }).get();
+            };
+            producer.send(record, callback).get();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        producer.close();
     }
 
     private static Properties properties() {
@@ -35,4 +43,8 @@ public class JavaProducer {
         return properties;
     }
 
+    @Override
+    public void close() throws IOException {
+       producer.close();
+    }
 }
