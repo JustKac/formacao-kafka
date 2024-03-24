@@ -12,20 +12,22 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
-public class KafkaService implements Closeable {
+import br.com.justkac.consumer.serialization.JsonDeserializer;
 
-    private final KafkaConsumer<String, String> consumer;
-    private final ConsumerFunction parse;
+public class KafkaService<T> implements Closeable {
 
-    KafkaService(String groupId, String topic, ConsumerFunction parse) {
-        this.consumer = new KafkaConsumer<String, String>(properties(groupId));
+    private final KafkaConsumer<String, T> consumer;
+    private final ConsumerFunction<T> parse;
+
+    KafkaService(String groupId, String topic, ConsumerFunction<T> parse) {
+        this.consumer = new KafkaConsumer<String, T>(properties(groupId));
         this.parse = parse;
         consumer.subscribe(Collections.singletonList(topic));
 
     }
 
-    KafkaService(String groupId, Pattern topic, ConsumerFunction parse) {
-        this.consumer = new KafkaConsumer<String, String>(properties(groupId));
+    KafkaService(String groupId, Pattern topic, ConsumerFunction<T> parse) {
+        this.consumer = new KafkaConsumer<String, T>(properties(groupId));
         this.parse = parse;
         consumer.subscribe(topic);
 
@@ -47,7 +49,7 @@ public class KafkaService implements Closeable {
         var properties = new Properties();
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         properties.setProperty(ConsumerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString());  // Personalizando o ID do consumidor
         properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");    // Limita o carregamento de mensagens a 1 por poll.
