@@ -8,6 +8,11 @@
   <groupId>br.com.justkac.producer</groupId>
   <artifactId>kafka-producer</artifactId>
   <version>1.0</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>service-kafka</module>
+    <module>service-new-order</module>
+  </modules>
 
   <name>kafka-producer</name>
   <!-- FIXME change it to the project's website -->
