@@ -8,6 +8,13 @@
   <groupId>br.com.justkac.consumer</groupId>
   <artifactId>kafka-consumer</artifactId>
   <version>1.0</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>service-kafka</module>
+    <module>service-email</module>
+    <module>service-log</module>
+    <module>service-fraud-detector</module>
+  </modules>
 
   <name>kafka-consumer</name>
   <!-- FIXME change it to the project's website -->
